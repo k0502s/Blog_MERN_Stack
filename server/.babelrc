@@ -1,0 +1,3 @@
+{
+    "presets": ["@babel/preset-env"] //최신문법 설정
+}

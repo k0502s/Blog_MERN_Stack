@@ -1,0 +1,44 @@
+{
+  "name": "k0502s",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": "14.15.3",
+    "npm": "6.14.9"
+  },
+  "scripts": {
+    "dev-watch": "babel-watch server/server.js --ignore './client'",
+    "prebuild": "cd client && npm run build",
+    "build": "babel server --out-dir build",
+    "build:server": "babel server --out-dir build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.13.0",
+    "@babel/core": "^7.13.8",
+    "@babel/node": "^7.13.0",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.13.9",
+    "aws-sdk": "^2.854.0",
+    "babel-loader": "8.1.0",
+    "babel-watch": "^7.4.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.4.1",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "mongoose": "^5.11.15",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {}
+}
