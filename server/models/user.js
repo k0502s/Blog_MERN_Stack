@@ -21,6 +21,14 @@ const UserSchema = new mongoose.Schema({
     enum: ["MainJuin", "SubJuin", "User"],
     default: "User",
   },
+  cart: {
+    type: Array,
+    default: []
+  },
+  history: {
+      type: Array,
+      default: []
+  },
   register_date: {
     type: Date,
     default: moment().format("YYYY-MM-DD hh:mm:ss"),

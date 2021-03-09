@@ -14,7 +14,7 @@ import { useSelector, useDispatch} from "react-redux";
 import { 
   LOGOUT_REQUEST,  
 } from "../redux/types";
-import LoginModal from "../components/auth/LoginModal";
+import LoginModal from "./auth/Login";
 import RegisterModal from "../components/auth/RegisterModal";
 
 
@@ -89,16 +89,7 @@ const AppNavbar = () => {
     </Fragment>
   );
 
-  const guestLink = (
-    <Fragment>
-      <NavItem>
-        <RegisterModal />
-      </NavItem>
-      <NavItem>
-        <LoginModal />
-      </NavItem>
-    </Fragment>
-  );
+  
 
   return (
     <Fragment>
@@ -110,7 +101,7 @@ const AppNavbar = () => {
           <NavbarToggler onClick={handleToggle} />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto d-felx justify-content-around" navbar>
-              {isAuthenticated ? authLink : guestLink}
+              {/* {isAuthenticated ? authLink : guestLink} */}
             </Nav>
           </Collapse>
         </Container>
