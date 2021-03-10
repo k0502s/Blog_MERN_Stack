@@ -1,9 +1,5 @@
 import express from 'express';
-
-
-
 import multer from 'multer';
-
 import Member from '../../models/member.js';
 
 const router = express.Router();
@@ -59,7 +55,6 @@ const uploadS3 = multer({
 
 // router.post('/image', (req, res) => {
 
-
 //     //가져온 이미지를 저장을 해주면 된다.
 //     upload(req, res, err => {
 //         if(err){
@@ -72,16 +67,127 @@ const uploadS3 = multer({
 // })
 
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
+  try{
     //받아온 정보들을 DB에 넣어준다.
     const member = new Member(req.body)
 
-    member.save((err) => {
-        if(err) return res.status(400).json({success: false, err})
-        return res.status(200).json({success: true})
+    await member.save(() => {
+    res.status(200).json({success: true})
     })
+  } catch(e) {
+    res.status(400).json({success: false, err})
+  }
 
 })
+
+
+
+const getPagination = (page, size) => {
+  const limit = size ? +size : 3;
+  const offset = page ? page * limit : 0;
+
+  return { limit, offset };
+};
+
+
+router.get("/", async (req, res) => {
+  try {
+    const { page, size, title } = req.query;
+    var condition = title
+      ? { title: { $regex: new RegExp(title), $options: "i" } }
+      : {};
+  
+    const { limit, offset } = getPagination(page, size);
+  
+   await Member.paginate(condition, { offset, limit })
+      .then((data) => {
+        res.send({
+          totalItems: data.totalDocs,
+          tutorials: data.docs,
+          totalPages: data.totalPages,
+          currentPage: data.page - 1
+        });
+      })
+  } catch(e) {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving tutorials.",
+    });
+  }
+});
+
+
+
+router.delete("/:id", async (req, res) => {
+
+  try {
+    const id = req.params.id;
+
+   await Member.findByIdAndRemove(id, { useFindAndModify: false })
+      .then((data) => {
+        if (!data) {
+          res.status(404).send({
+            success: false,
+          });
+        } else {
+          res.send({
+            success: true,
+          });
+        }
+      })
+  } catch(e) {
+    res.status(500).send({
+      success: false,
+    });
+  }
+});
+
+
+
+router.get("/:id", async (req, res) => {
+
+  try {
+    const id = req.params.id;
+
+    await Member.findById(id)
+        .then((data) => {
+          if (!data)
+            res.status(404).send({ message: "Not found Tutorial with id " + id });
+          else res.send(data);
+        })
+  } catch(e) {
+    res
+    .status(500)
+    .send({ message: "Error retrieving Tutorial with id=" + id });
+  }
+});
+
+
+
+router.put("/:id", async (req, res) => {
+  try {
+    if (!req.body) {
+      return res.status(400).send({
+        message: "Data to update can not be empty!",
+      });
+    }
+    const id = req.params.id;
+  
+   await Member.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+      .then((data) => {
+        if (!data) {
+          res.status(404).send({
+            message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`,
+          });
+        } else res.send({ message: "Tutorial was updated successfully." });
+      })
+  } catch (e) {
+    res.status(500).send({
+      message: "Error updating Tutorial with id=" + id,
+    });
+  }
+});
 
 
 // router.post('/products', (req, res) => {

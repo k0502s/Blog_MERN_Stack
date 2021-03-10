@@ -4,7 +4,13 @@ import { push } from "connected-react-router";
 import {
     MEMBER_UPLOADING_REQUEST,
     MEMBER_UPLOADING_SUCCESS,
-    MEMBER_UPLOADING_FAILURE
+    MEMBER_UPLOADING_FAILURE,
+    MEMBER_LIST_REQUEST,
+    MEMBER_LIST_SUCCESS,
+    MEMBER_LIST_FAILURE,
+    MEMBER_DELETE_REQUEST,
+    MEMBER_DELETE_SUCCESS,
+    MEMBER_DELETE_FAILURE
 } from "../types";
 
 
@@ -13,7 +19,7 @@ import {
 const memberuploadAPI = (memberData) => {
   console.log(memberData, "memberData");
  
-  return axios.post("/api/member", memberData);
+  return axios.post("api/member", memberData);
 };
 
 function* memberUpload(action) {
@@ -43,8 +49,72 @@ function* watchMenberUpload() {
 
 
 
+
+// Member list get
+
+const memberlistAPI = (memberData) => {
+  console.log(memberData, "memberData");
+ 
+  return axios.get("api/member", memberData);
+};
+
+function* memberList(action) {
+  try {
+    const result = yield call(memberlistAPI, action.payload);
+    console.log(result);
+    yield put({
+      type: MEMBER_LIST_SUCCESS,
+      payload: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: MEMBER_LIST_FAILURE,
+      payload: e.response,
+    });
+  }
+}
+
+function* watchMemberList() {
+  yield takeEvery(MEMBER_LIST_REQUEST, memberList);
+}
+
+
+
+
+// Member delete
+
+const memberdeleteAPI = (memberData) => {
+  
+ 
+  return axios.delete(`api/member/${memberData}`);
+};
+
+function* memberDelete(action) {
+  try {
+    const result = yield call(memberdeleteAPI, action.payload);
+    console.log(result);
+    yield put({
+      type: MEMBER_DELETE_SUCCESS,
+      payload: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: MEMBER_DELETE_FAILURE,
+      payload: e.response,
+    });
+  }
+}
+
+function* watchMemberDelete() {
+  yield takeEvery(MEMBER_DELETE_REQUEST, memberDelete);
+}
+
+
+
 export default function* memberSaga() {
   yield all([
     fork(watchMenberUpload),
+    fork(watchMemberList),
+    fork(watchMemberDelete),
   ]);
 }

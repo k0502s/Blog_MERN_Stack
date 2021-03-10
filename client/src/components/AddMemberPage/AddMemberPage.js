@@ -89,11 +89,11 @@ const AddMemberPage = (props) => {
           <label>이름</label>
           <Input onChange={titleChangeHandler} value={Title}/>
           <br />
-          <label>나이</label>
+          <label>카메라 기종</label>
           <Input onChange={descriptionChangeHandler} value={Description}/>
           <br />
-          <label>카메라 기종</label>
-          <Input onChange={priceChangeHandler} value={Price}/>
+          <label>나이</label>
+          <Input type="number" onChange={priceChangeHandler} value={Price}/>
           <br />
           <select onChange={continentChangeHandler} value={Continent}>
             {Continents.map(item => (

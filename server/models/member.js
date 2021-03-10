@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
+mongoose.Promise = global.Promise;
 const Schema = mongoose.Schema;
 
 
@@ -49,6 +51,8 @@ const MemberSchema = new mongoose.Schema({
 //     }
 // })
 
+MemberSchema.plugin(mongoosePaginate);
+
 const Member = mongoose.model('member', MemberSchema);
 
-export default  Member;
+export default Member;
