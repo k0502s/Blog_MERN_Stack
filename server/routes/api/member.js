@@ -104,7 +104,7 @@ router.get("/", async (req, res) => {
       .then((data) => {
         res.send({
           totalItems: data.totalDocs,
-          tutorials: data.docs,
+          memberdata: data.docs,
           totalPages: data.totalPages,
           currentPage: data.page - 1
         });
@@ -153,7 +153,7 @@ router.get("/:id", async (req, res) => {
     await Member.findById(id)
         .then((data) => {
           if (!data)
-            res.status(404).send({ message: "Not found Tutorial with id " + id });
+            res.status(404).send({ message: "Not found id " + id });
           else res.send(data);
         })
   } catch(e) {
@@ -178,13 +178,13 @@ router.put("/:id", async (req, res) => {
       .then((data) => {
         if (!data) {
           res.status(404).send({
-            message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`,
+            message: `Cannot update id=${id}.`,
           });
-        } else res.send({ message: "Tutorial was updated successfully." });
+        } else res.send({ message: "updated successfully." });
       })
   } catch (e) {
     res.status(500).send({
-      message: "Error updating Tutorial with id=" + id,
+      message: "Error updating id=" + id,
     });
   }
 });

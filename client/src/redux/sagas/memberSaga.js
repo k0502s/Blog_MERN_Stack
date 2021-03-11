@@ -10,7 +10,13 @@ import {
     MEMBER_LIST_FAILURE,
     MEMBER_DELETE_REQUEST,
     MEMBER_DELETE_SUCCESS,
-    MEMBER_DELETE_FAILURE
+    MEMBER_DELETE_FAILURE,
+    MEMBER_SINGLELIST_REQUEST,
+    MEMBER_SINGLELIST_SUCCESS,
+    MEMBER_SINGLELIST_FAILURE,
+    MEMBER_UPDATELIST_REQUEST,
+    MEMBER_UPDATELIST_SUCCESS,
+    MEMBER_UPDATELIST_FAILURE
 } from "../types";
 
 
@@ -80,6 +86,67 @@ function* watchMemberList() {
 
 
 
+// Member list single get
+
+const membersinglelistAPI = (memberData) => {
+  console.log(memberData, "memberData");
+ 
+  return axios.get(`api/member/${memberData}`);
+};
+
+function* memberSingleList(action) {
+  try {
+    const result = yield call(membersinglelistAPI, action.payload);
+    console.log(result);
+    yield put({
+      type: MEMBER_SINGLELIST_SUCCESS,
+      payload: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: MEMBER_SINGLELIST_FAILURE,
+      payload: e.response,
+    });
+  }
+}
+
+function* watchMemberSingleList() {
+  yield takeEvery(MEMBER_SINGLELIST_REQUEST, memberSingleList);
+}
+
+
+// Member list update
+
+const memberupdateAPI = (memberData) => {
+  console.log(memberData, "memberData");
+ 
+  return axios.put(`api/member/${memberData.id}`, memberData);
+};
+
+function* memberUpdate(action) {
+  try {
+    const result = yield call(memberupdateAPI, action.payload);
+    console.log(result);
+    yield put({
+      type: MEMBER_UPDATELIST_SUCCESS,
+      payload: result.data,
+    });
+    yield put(push('/list'))
+  } catch (e) {
+    yield put({
+      type: MEMBER_UPDATELIST_FAILURE,
+      payload: e.response,
+    });
+  }
+}
+
+function* watchMemberUpdate() {
+  yield takeEvery(MEMBER_UPDATELIST_REQUEST, memberUpdate);
+}
+
+
+
+
 
 // Member delete
 
@@ -116,5 +183,7 @@ export default function* memberSaga() {
     fork(watchMenberUpload),
     fork(watchMemberList),
     fork(watchMemberDelete),
+    fork(watchMemberSingleList),
+    fork(watchMemberUpdate),
   ]);
 }

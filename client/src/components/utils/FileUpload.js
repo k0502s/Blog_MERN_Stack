@@ -1,18 +1,47 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Dropzone from 'react-dropzone'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { useDispatch, useSelector } from "react-redux";
+// import { MEMBER_SINGLELIST_REQUEST} from "../../redux/types";
 import {
     faBriefcase,
     faPaperPlane,
     faQuestion,
     faImage,
+    faPlus
   } from "@fortawesome/free-solid-svg-icons";
 import Axios from 'axios';
 
 
 const FileUpload = (props) => {
 
+    
     const [Images, setImages] = useState([])
+    // const { singlememberlist } = useSelector((state) => state.member);
+    // const dispatch = useDispatch();
+
+    
+    // const getMemberList = (id) => {
+    
+    //         dispatch({
+    //           type: MEMBER_SINGLELIST_REQUEST,
+    //           payload: id
+    //         })
+    //       };
+    
+    
+    //   useEffect(() => {
+        
+    //     getMemberList(props.memberid);
+        
+    //   }, [props.memberid]);
+
+
+    // useEffect(() => {
+    //     setImages([singlememberlist.images])
+    // }, [singlememberlist.images])
+    
+
 
     const dropHandler = (files) => {
 
@@ -51,35 +80,31 @@ const FileUpload = (props) => {
 
     return (
     <div style={{display: 'flex', justifyContent: 'space-between'}}>
-        <Dropzone onDrop={dropHandler}>
+        <Dropzone onDrop={dropHandler} >
              {({getRootProps, getInputProps}) => (
         <section>
              <div style={{
-                 width: 250, height: 240, border: '1px solid lightgray', borderRadius: '120px',
+                 width: 25, height: 24, marginLeft:'150px', marginTop:'100px',
                  display: 'flex', alignItems: 'center', justifyContent: 'center' 
                 }}
                 {...getRootProps()}>
                  <input {...getInputProps()} />
-                 <FontAwesomeIcon icon={faImage} style={{fontSize:'4rem'}} />
+                 <FontAwesomeIcon icon={faPlus} style={{fontSize:'4rem'}} />
              </div>
         </section>
   )}
         </Dropzone>
 
-        <div style={{display: 'flex', width: '350px', height: '250px', overflow: 'scroll'}}>
+        <div style={{display: 'flex', width: '250px', height: '240px', marginRight: '100px', border:'1px solid lightgray', borderRadius:'200px'}}>
             {Images.map((image, index) => (
                 <div onClick={()=> deleteHandler(image)} key={index}>
-                    <img style={{minWidth: '150px', width:'150px', height: '150px'}}
+                    <img style={{minWidth: '250px', width:'250px', height: '240px', border:'1px solid lightgray', borderRadius:'200px'}}
                           src={`${image}`} 
                         //   http://localhost:5000/
                     />
                 </div>
-            ))}
-            
-            
-        </div>        
-
-
+            ))} 
+        </div>
     </div>
     )
 }

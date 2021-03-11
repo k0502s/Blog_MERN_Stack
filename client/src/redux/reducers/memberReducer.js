@@ -7,7 +7,13 @@ import {
     MEMBER_LIST_FAILURE,
     MEMBER_DELETE_REQUEST,
     MEMBER_DELETE_SUCCESS,
-    MEMBER_DELETE_FAILURE
+    MEMBER_DELETE_FAILURE,
+    MEMBER_SINGLELIST_REQUEST,
+    MEMBER_SINGLELIST_SUCCESS,
+    MEMBER_SINGLELIST_FAILURE,
+    MEMBER_UPDATELIST_REQUEST,
+    MEMBER_UPDATELIST_SUCCESS,
+    MEMBER_UPDATELIST_FAILURE
   } from "../types";
 
 
@@ -16,6 +22,8 @@ import {
     success: "",
     totalItems: "",
     memberlist: "",
+    singlememberlist: "",
+    updatelist:"",
     totalPages: "",
     currentPage: "",
     deletesuccess: "",
@@ -32,7 +40,8 @@ import {
               case MEMBER_UPLOADING_SUCCESS:
                 return {
                   ...state,
-                  success: action.payload.success
+                  success: action.payload.success,
+                  singlememberlist:"",
 
                 }
               case MEMBER_UPLOADING_FAILURE:
@@ -53,7 +62,7 @@ import {
                 return {
                   ...state,
                   totalItems: action.payload.totalItems,
-                  memberlist: action.payload.tutorials,
+                  memberlist: action.payload.memberdata,
                   totalPages: action.payload.totalPages,
                   currentPage: action.payload.currentPage
                 }
@@ -85,6 +94,43 @@ import {
                     deletesuccess: action.payload.success
                   }
 
+                   case MEMBER_SINGLELIST_REQUEST: 
+                return {
+                  ...state,
+                  errorMsg: "",
+                  isLoading: true
+                }
+                case MEMBER_SINGLELIST_SUCCESS:
+                  return {
+                    ...state,
+                    singlememberlist: action.payload
+                  }
+                case MEMBER_SINGLELIST_FAILURE:
+                  return {
+                    ...state,
+                    errorMsg:"error" ,
+                    singlememberlist: action.payload.message
+                  }
+
+                  case MEMBER_UPDATELIST_REQUEST: 
+                  return {
+                    ...state,
+                    errorMsg: "",
+                    isLoading: true
+                  }
+                  case MEMBER_UPDATELIST_SUCCESS:
+                    return {
+                      ...state,
+                      singlememberlist: "",
+                      updatelist: action.payload.message
+                    }
+                  case MEMBER_UPDATELIST_FAILURE:
+                    return {
+                      ...state,
+                      errorMsg:"error" ,
+                      updatelist: action.payload.message
+                    }
+                  
               default:
                   return state;             
     }

@@ -9,13 +9,9 @@ import { MEMBER_UPLOADING_REQUEST } from "../../redux/types";
 
 
 const Continents =[
-    {key:1, value: "Arfica"},
-    {key:2, value: "Europe"},
-    {key:3, value: "Asia"},
-    {key:4, value: "North America"},
-    {key:5, value: "South America"},
-    {key:6, value: "Australia"},
-    {key:7, value: "Antarctica"}
+    {key:1, value: "남"},
+    {key:2, value: "여"},
+  
 ]
 
 
@@ -24,7 +20,7 @@ const AddMemberPage = (props) => {
     const [Title, setTitle] = useState("")
     const [Description, setDescription] = useState("")
     const [Price, setPrice] = useState("")
-    const [Continent, setContinent] = useState(1)
+    const [Continent, setContinent] = useState(0)
     const [Images, setImages] = useState([])
     const dispatch = useDispatch();
 
@@ -56,9 +52,31 @@ const AddMemberPage = (props) => {
     const submitHandler = (e) => {
         e.preventDefault();
 
-        if(!Title || !Description || !Price || !Continent || !Images){
-            return alert("빈 칸에 정보를 입력해야 합니다.")
+        const name = document.myform.title.value;
+        const camera = document.myform.description.value
+        const age = document.myform.price.value
+        const sex = document.myform.sex.value
+        if(name===""){
+            return alert("이름 정보를 입력해야 합니다.")
         }
+        if(camera===""){
+            return alert("카메라 기종 정보를 입력해야 합니다.")
+        }
+        if(age===""){
+            return alert("나이 정보를 입력해야 합니다.")
+        }
+        if(sex===""){
+            return alert("성별 정보를 입력해야 합니다.")
+        }
+        if(!Images){
+                return alert("프로필 사진을 입력해야 합니다.")
+            }
+        // if(!Continent || !Images){
+        //     return alert("정보를 입력해야 합니다.")
+        // }
+        // if(!Title || !Description || !Price || !Continent || !Images){
+        //     return alert("빈 칸에 정보를 입력해야 합니다.")
+        // }
 
         //서버에 채운 값들을 request을 보낸다.
         const body = {
@@ -83,19 +101,20 @@ const AddMemberPage = (props) => {
         <div  style={{textAlign: 'center', marginBottom: '1rem'}}>
             <h2>회원 추가하기</h2>
         </div>
-        <Form onSubmit={submitHandler}>
+        <Form onSubmit={submitHandler} name="myform">
           {/* DropZone   */}
           <FileUpload refreshFunction={updateImages}/>
           <label>이름</label>
-          <Input onChange={titleChangeHandler} value={Title}/>
+          <Input onChange={titleChangeHandler} value={Title} name="title" />
           <br />
           <label>카메라 기종</label>
-          <Input onChange={descriptionChangeHandler} value={Description}/>
+          <Input onChange={descriptionChangeHandler} value={Description} name="description"/>
           <br />
           <label>나이</label>
-          <Input type="number" onChange={priceChangeHandler} value={Price}/>
+          <Input type="number" onChange={priceChangeHandler} value={Price} name="price"/>
           <br />
-          <select onChange={continentChangeHandler} value={Continent}>
+          <select onChange={continentChangeHandler} value={Continent} name="sex">
+            <option value="">성별을 선택해주세요</option>
             {Continents.map(item => (
                 <option key={item.key} value={item.key}>{item.value}</option>
             ))}

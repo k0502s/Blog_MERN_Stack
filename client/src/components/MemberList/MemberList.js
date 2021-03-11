@@ -7,14 +7,18 @@ import Axios from 'axios'
 import { MEMBER_DELETE_REQUEST, MEMBER_LIST_REQUEST } from "../../redux/types";
 
 
-
+const sex = {
+ 1: "남",
+ 2: "여"
+}
 
 const MemberList = (props) => {
 
   const dispatch = useDispatch()
   const [currentTutorial, setCurrentTutorial] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const [searchTitle, setSearchTitle] = useState("");
+  const [searchTitle, setSearchTitle] = useState([]);
+
 
 
   ////페이지 번호/////
@@ -23,7 +27,7 @@ const MemberList = (props) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(3);
   const { memberlist, totalPages } = useSelector((state) => state.member)
-  const pageSizes = [3, 6, 9];
+  const pageSizes = [3, 6];
 
 
 
@@ -190,7 +194,7 @@ const MemberList = (props) => {
           <div>
             <h4>MEMBER DATA</h4>
             <div>
-            <img style={{ width: '130px' }} alt="member"
+            <img style={{ width: '130px', borderRadius: '100px' }} alt="member"
             src={renderImage(currentTutorial.images)} /> 
             </div>
             <div>
@@ -211,6 +215,13 @@ const MemberList = (props) => {
               </label>{" "}
               {currentTutorial.price}
             </div>
+            <div>
+              <label>
+                <strong>성별 :</strong>
+              </label>{" "}
+              {sex[currentTutorial.continents]}
+            </div>
+            
 
             <Link
               to={"/edit/" + currentTutorial._id}
