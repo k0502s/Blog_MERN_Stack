@@ -13,7 +13,8 @@ import {
     MEMBER_SINGLELIST_FAILURE,
     MEMBER_UPDATELIST_REQUEST,
     MEMBER_UPDATELIST_SUCCESS,
-    MEMBER_UPDATELIST_FAILURE
+    MEMBER_UPDATELIST_FAILURE,
+
   } from "../types";
 
 
@@ -130,7 +131,7 @@ import {
                       errorMsg:"error" ,
                       updatelist: action.payload.message
                     }
-                  
+      
               default:
                   return state;             
     }

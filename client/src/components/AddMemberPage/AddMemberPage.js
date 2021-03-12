@@ -56,6 +56,9 @@ const AddMemberPage = (props) => {
         const camera = document.myform.description.value
         const age = document.myform.price.value
         const sex = document.myform.sex.value
+        // if(name==="" || camera==="" || age==="" || sex===""){
+        //     return alert("빈 칸에 정보를 입력해야 합니다.")
+        // }
         if(name===""){
             return alert("이름 정보를 입력해야 합니다.")
         }
@@ -68,15 +71,9 @@ const AddMemberPage = (props) => {
         if(sex===""){
             return alert("성별 정보를 입력해야 합니다.")
         }
-        if(!Images){
+        if(Images===[]){
                 return alert("프로필 사진을 입력해야 합니다.")
             }
-        // if(!Continent || !Images){
-        //     return alert("정보를 입력해야 합니다.")
-        // }
-        // if(!Title || !Description || !Price || !Continent || !Images){
-        //     return alert("빈 칸에 정보를 입력해야 합니다.")
-        // }
 
         //서버에 채운 값들을 request을 보낸다.
         const body = {

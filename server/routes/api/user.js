@@ -1,6 +1,6 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-
+import Member from '../../models/member.js';
 import jwt from "jsonwebtoken";
 import config from "../../config/index.js";
 import auth from "../../middleware/auth.js";
@@ -138,5 +138,88 @@ router.post("/:userName/profile", auth, async (req, res) => {
 
 
  
+
+router.post("/warn", auth, (req, res) => {
+
+  //먼저 User 콜렉션에 해당 유저의 정보 가져오기
+
+  //req.user === user //middleware을 통과하여 토큰에서 얻어온 user의 id값 가져옴
+  User.findOne({_id: req.user.id},
+  (err, userInfo) => {
+
+   //가져온 정보에서 카트에다 넣으려하는 상품이 이미 들어 있는지 확인
+   let duplicate = false;
+   userInfo.cart.forEach((item) => {
+       if(item.id === req.body.warndata){ //product와 user에 들가있는 cart id 값을 비교해서 확인
+           duplicate = true;
+       }
+   })
+       //상품이 이미 있을때
+       if(duplicate) {
+           User.findOneAndUpdate(
+               {_id: req.user.id, "cart.id": req.body.warndata},
+               //$inc 올려준다, 더해준다는 의미이며
+               //$.quantity을 통해 cart의 quantity을 1 올려준다는 의미이다.
+               {$inc: {"cart.$.quantity": 1}},
+               //업데이트된 정보를 받기 위해 new: true을 주었다.
+               {new: true},
+               (err, userInfo) => {
+                   if(err) return res.status(400).json({ success: false, err })
+                   res.status(200).send(userInfo.cart)
+               }
+
+           )
+       }
+        //상품이 이미 있지 않을때
+       else {
+           User.findOneAndUpdate(
+               {_id: req.user.id},
+               {
+                   $push: {
+                       cart: {
+                           id: req.body.warndata,
+                           quantity: 1,
+                           date: Date.now()
+                       }
+                   }
+               },
+               {new: true},
+               (err, userInfo) => {
+                   if(err) return res.status(400).json({ success: false, err })
+                   res.status(200).send(userInfo.cart)
+               }
+           )
+       }
+  })
+
+});
+
+
+
+
+router.get("/warnlist_by_id", (req, res) => {
+  let type = req.query.type
+  let warnmemberIds = req.query.id
+  // id=12312,1231231,123123 이거를
+  //이렇게 바꿈 productIds = ['12312', '1231231', '123123'] 받은 여러 id값을 배열로 만들어줌
+  if(type === "array"){
+      let ids = req.query.id.split(',');
+      warnmemberIds = ids.map(item => { //map으로 콤마 하나하나 박아줌
+          return item
+      })
+  }
+  //이제 여러개 상품 id을 이용하여 여러 개 삼품 가져올 수 있게됨
+
+  //productIds을 이용해서 DB에서 productId와 같은 상품의 정보를 가져온다.
+  Member.find({_id: {$in: warnmemberIds }}) //id값이 여러개 들어 있는 배열을 못넣어서 $in을 사용함 
+  .populate('writer')
+  .exec((err, warnmember) => {
+      if(err) return res.status(400).send(err)
+      return res.status(200).send(warnmember)
+  })
+})
+
+
+
 
 export default router;

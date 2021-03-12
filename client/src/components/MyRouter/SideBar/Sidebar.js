@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,7 +8,7 @@ import {
   faImage,
   
 } from "@fortawesome/free-solid-svg-icons";
-import { NavItem, NavLink, Nav } from "reactstrap";
+import { NavItem, NavLink, Nav, Badge } from "reactstrap";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 import Login from "../../../components/auth/Login"
@@ -16,9 +16,15 @@ import Login from "../../../components/auth/Login"
 
 const SideBar = ({ isOpen, toggle }) => {
   
-  const { isAuthenticated } = useSelector(
+  const { isAuthenticated, warnlistDetail, user } = useSelector(
     (state) => state.auth
   );
+  const [usercart, setusercart] = useState("")
+
+  useEffect(() => {
+    setusercart(user.cart)
+  }, [user])
+
 
 
   const guestLink = (
@@ -49,7 +55,7 @@ const SideBar = ({ isOpen, toggle }) => {
       <NavItem>
         <NavLink tag={Link} to={"/warnlist"}>
           <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
-          WARN MEMBER LIST
+          WARN MEMBER LIST <Badge color="secondary">{usercart.length}</Badge>
         </NavLink>
       </NavItem>
       <NavItem>

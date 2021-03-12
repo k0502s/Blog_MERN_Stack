@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
-mongoose.Promise = global.Promise;
-const Schema = mongoose.Schema;
+
 
 
 // Create Schema
 const MemberSchema = new mongoose.Schema({
     writer: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     title: {

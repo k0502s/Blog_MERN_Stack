@@ -20,6 +20,9 @@ import {
   PASSWORD_EDIT_UPLOADING_SUCCESS,
   PASSWORD_EDIT_UPLOADING_REQUEST,
   PASSWORD_EDIT_UPLOADING_FAILURE,
+  MEMBER_WARN_REQUEST,
+  MEMBER_WARN_SUCCESS,
+  MEMBER_WARN_FAILURE
 } from "../types";
 
 
@@ -198,6 +201,44 @@ function* watchEditPassword() {
 
 
 
+const memberWarnAPI = (payload) => {
+  console.log(payload);
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const token = payload.token;
+
+  if (token) {
+    config.headers["x-auth-token"] = token;
+  }
+  return axios.post("api/user/warn", payload, config);
+};
+
+function* memberWarn(action) {
+  try {
+    console.log(action, "warn");
+    const result = yield call(memberWarnAPI, action.payload);
+    yield put({
+      type: MEMBER_WARN_SUCCESS,
+      payload: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: MEMBER_WARN_FAILURE,
+      payload: e.response,
+    });
+  }
+}
+
+function* watchmemberWarn() {
+  yield takeEvery(MEMBER_WARN_REQUEST, memberWarn);
+}
+
+
 
 export default function* authSaga() {
   yield all([
@@ -207,5 +248,6 @@ export default function* authSaga() {
     fork(watchregisterUser),
     fork(watchclearError),
     fork(watchEditPassword),
+    fork(watchmemberWarn),
   ]);
 }

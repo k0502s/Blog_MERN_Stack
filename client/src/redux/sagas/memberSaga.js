@@ -16,7 +16,10 @@ import {
     MEMBER_SINGLELIST_FAILURE,
     MEMBER_UPDATELIST_REQUEST,
     MEMBER_UPDATELIST_SUCCESS,
-    MEMBER_UPDATELIST_FAILURE
+    MEMBER_UPDATELIST_FAILURE,
+    MEMBER_WARNLIST_REQUEST,
+    MEMBER_WARNLIST_SUCCESS,
+    MEMBER_WARNLIST_FAILURE
 } from "../types";
 
 
@@ -131,7 +134,9 @@ function* memberUpdate(action) {
       type: MEMBER_UPDATELIST_SUCCESS,
       payload: result.data,
     });
-    yield put(push('/list'))
+    yield all([
+      put(push('/list'))
+  ]);
   } catch (e) {
     yield put({
       type: MEMBER_UPDATELIST_FAILURE,
@@ -142,6 +147,53 @@ function* memberUpdate(action) {
 
 function* watchMemberUpdate() {
   yield takeEvery(MEMBER_UPDATELIST_REQUEST, memberUpdate);
+}
+
+
+
+
+// Member Warn list
+
+const memberWarnListAPI = (data) => {
+  console.log(data, "data");
+
+  const warnListsId = data.warnListsId
+  const list = data.list
+
+  return axios.get(`/api/user/warnlist_by_id?id=${warnListsId}&type=array`)
+  .then(response =>{
+    //CartItem 들에 해당하는 정보들을 product Collection에서 가져온 후에
+    console.log(response.data)
+    //Quantity 정보를 넣어 준다. 즉 product 정보와, cart 정보의 Quantity의 조합이다.
+    list.forEach(listItem => {
+        response.data.forEach((listDetail, index) => {
+            if(listItem.id === listDetail._id) {
+                response.data[index].quantity = listItem.quantity
+            }
+        })
+    })
+    return response.data;
+  });
+};
+
+function* memberWarnList(action) {
+  try {
+    const result = yield call(memberWarnListAPI, action.payload);
+    console.log(result);
+    yield put({
+      type: MEMBER_WARNLIST_SUCCESS,
+      payload: result
+    });
+  } catch (e) {
+    yield put({
+      type: MEMBER_WARNLIST_FAILURE,
+      payload: e.response,
+    });
+  }
+}
+
+function* watchmemberWarnList() {
+  yield takeEvery(MEMBER_WARNLIST_REQUEST, memberWarnList);
 }
 
 
@@ -185,5 +237,6 @@ export default function* memberSaga() {
     fork(watchMemberDelete),
     fork(watchMemberSingleList),
     fork(watchMemberUpdate),
+    fork(watchmemberWarnList)
   ]);
 }

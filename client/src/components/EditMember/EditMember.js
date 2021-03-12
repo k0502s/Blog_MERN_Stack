@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import { Button, Form, Input} from 'reactstrap';
-import FileUpload from '../utils/FileUpload';
 import { useDispatch, useSelector } from "react-redux";
 import { MEMBER_SINGLELIST_REQUEST, MEMBER_UPDATELIST_REQUEST } from "../../redux/types";
+import { Link } from "react-router-dom";
 
 
 
@@ -15,8 +15,6 @@ const Continents =[
 
 
 const EditMember = (props) => {
-
-  const memberid = props.match.params.id
 
   const [form, setValues] = useState({
     title: "",
@@ -54,6 +52,9 @@ const EditMember = (props) => {
     })
   }, [singlememberlist.title, singlememberlist.description, singlememberlist.price, singlememberlist.continent])
 
+  useEffect(() => {
+         setImages([singlememberlist.images])
+     }, [singlememberlist.images])
   
 
   const onChange = (e) => {
@@ -102,7 +103,6 @@ const EditMember = (props) => {
           title: title,
           description: description,
           price: price,
-          images: Images,
           continents: Continent
       }
 
@@ -119,8 +119,18 @@ const EditMember = (props) => {
         <h2>회원 정보 수정</h2>
     </div>
     <Form onSubmit={submitHandler} name="myform">
-      {/* DropZone   */}
-      <FileUpload refreshFunction={updateImages} memberid={memberid}/>
+      <div>
+      <img style={{minWidth: '250px', width:'250px', height: '240px', border:'1px solid lightgray', borderRadius:'200px'}}
+                          src={`${Images}`} 
+                        //   http://localhost:5000/
+                    />
+       <Link
+              to={"/editprofile/" + singlememberlist._id}
+              className="m-3 btn-sm btn-danger"
+            >
+              Profile Edit
+      </Link>
+      </div>
       <label>이름</label>
       <Input onChange={onChange} placeholder={'빈 칸에 정보를 입력해주세요.'} name="title" defaultValue={singlememberlist.title}/>
       <br />

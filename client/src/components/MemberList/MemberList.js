@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 import { useSelector, useDispatch } from "react-redux";
-import Axios from 'axios'
+import WarnButton from "./Section/WarnButton"
 import { MEMBER_DELETE_REQUEST, MEMBER_LIST_REQUEST } from "../../redux/types";
 
 
@@ -78,11 +78,6 @@ const MemberList = (props) => {
     setPage(1);
   };
 
-
-
-
-
-
   
 /////리스트 목록//////
 
@@ -128,6 +123,9 @@ const MemberList = (props) => {
   };
 
   const renderImage = (images) => {
+    if(images===[]){
+      return `${process.env.REACT_APP_BASIC_IMAGE_URL}`
+    }
     if(images.length > 0) {
         let image = images[0]
         return `${image}`
@@ -144,7 +142,7 @@ const MemberList = (props) => {
           <input
             type="text"
             className="form-control"
-            placeholder="Search by title"
+            placeholder="회원 이름을 입력해주세요"
             value={searchTitle}
             onChange={onChangeSearchTitle}
           />
@@ -194,7 +192,7 @@ const MemberList = (props) => {
           <div>
             <h4>MEMBER DATA</h4>
             <div>
-            <img style={{ width: '130px', borderRadius: '100px' }} alt="member"
+            <img style={{ width: '130px' }} alt="member" oneEror="this.style.display='none'"
             src={renderImage(currentTutorial.images)} /> 
             </div>
             <div>
@@ -221,24 +219,26 @@ const MemberList = (props) => {
               </label>{" "}
               {sex[currentTutorial.continents]}
             </div>
-            
-
+            <div style={{display:'flex'}}>
             <Link
               to={"/edit/" + currentTutorial._id}
-              className="m-3 btn-sm btn-danger"
+              className="m-3 btn-sm btn-success"
             >
-              Edit
+              EDIT
             </Link>
+            {/* WarnInfo */}
+            <WarnButton detail={currentTutorial} />
+            </div>
           </div>
         ) : (
           <div>
             <br />
-            <p>Please click on a Tutorial...</p>
+            <p>Please Click on a List...</p>
           </div>
         )}
       </div>
       <div className="mt-3" >
-          <h7 style={{marginLeft:250}}>Items per Page: </h7>
+          <h7 style={{marginLeft:250}}>Page: </h7>
           <select onChange={handlePageSizeChange} value={pageSize}>
             {pageSizes.map((size) => (
               <option key={size} value={size}>

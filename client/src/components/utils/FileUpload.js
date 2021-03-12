@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react'
+import { Button, Form, Input} from 'reactstrap';
 import Dropzone from 'react-dropzone'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { useDispatch, useSelector } from "react-redux";
-// import { MEMBER_SINGLELIST_REQUEST} from "../../redux/types";
 import {
     faBriefcase,
     faPaperPlane,
@@ -17,29 +16,7 @@ const FileUpload = (props) => {
 
     
     const [Images, setImages] = useState([])
-    // const { singlememberlist } = useSelector((state) => state.member);
-    // const dispatch = useDispatch();
-
     
-    // const getMemberList = (id) => {
-    
-    //         dispatch({
-    //           type: MEMBER_SINGLELIST_REQUEST,
-    //           payload: id
-    //         })
-    //       };
-    
-    
-    //   useEffect(() => {
-        
-    //     getMemberList(props.memberid);
-        
-    //   }, [props.memberid]);
-
-
-    // useEffect(() => {
-    //     setImages([singlememberlist.images])
-    // }, [singlememberlist.images])
     
 
 
@@ -64,27 +41,31 @@ const FileUpload = (props) => {
         })
     }
 
-    const deleteHandler = (image) => {
-        const currentIndex = Images.indexOf(image)
-        console.log('currentIndex', currentIndex)
+    const removefile = () => {
+        setImages([])
+      }
 
-        let newImages = [...Images]
-        //splice 메소드의 첫번째 인자는 클릭 이벤트로 선택된 이미지이고
-        //두번째 인자는 선택된 이미지를 중심으로 몇개를 지울지 선택하는 것이다.
-        newImages.splice(currentIndex, 1)
+    // const deleteHandler = (image) => {
+    //     const currentIndex = Images.indexOf(image)
+    //     console.log('currentIndex', currentIndex)
 
-        setImages(newImages) //삭제 후 새롭게 state 값을 만들어준다.
+    //     let newImages = [...Images]
+    //     //splice 메소드의 첫번째 인자는 클릭 이벤트로 선택된 이미지이고
+    //     //두번째 인자는 선택된 이미지를 중심으로 몇개를 지울지 선택하는 것이다.
+    //     newImages.splice(currentIndex, 1)
 
-        props.refreshFunction(newImages)
-    }
+    //     setImages(newImages) //삭제 후 새롭게 state 값을 만들어준다.
+
+    //     props.refreshFunction(newImages)
+    // }
 
     return (
     <div style={{display: 'flex', justifyContent: 'space-between'}}>
-        <Dropzone onDrop={dropHandler} >
+        <Dropzone onDrop={dropHandler} multiple={false}>
              {({getRootProps, getInputProps}) => (
         <section>
              <div style={{
-                 width: 25, height: 24, marginLeft:'150px', marginTop:'100px',
+                 width: 25, height: 24, marginLeft:'70px', marginTop:'100px',
                  display: 'flex', alignItems: 'center', justifyContent: 'center' 
                 }}
                 {...getRootProps()}>
@@ -95,15 +76,16 @@ const FileUpload = (props) => {
   )}
         </Dropzone>
 
-        <div style={{display: 'flex', width: '250px', height: '240px', marginRight: '100px', border:'1px solid lightgray', borderRadius:'200px'}}>
+        <div style={{display: 'flex', width: '250px', height: '240px', marginLeft: '50px', border:'1px solid lightgray', borderRadius:'200px'}}>
             {Images.map((image, index) => (
-                <div onClick={()=> deleteHandler(image)} key={index}>
                     <img style={{minWidth: '250px', width:'250px', height: '240px', border:'1px solid lightgray', borderRadius:'200px'}}
                           src={`${image}`} 
                         //   http://localhost:5000/
                     />
-                </div>
-            ))} 
+            ))}   
+        </div>
+        <div>
+        <Button className="btn-sm btn-danger" onClick={removefile} style={{marginTop:'190px', marginRight:'75px'}}>Remove file</Button>
         </div>
     </div>
     )

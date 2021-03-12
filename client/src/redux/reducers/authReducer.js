@@ -17,6 +17,12 @@ import {
     PASSWORD_EDIT_UPLOADING_REQUEST,
     PASSWORD_EDIT_UPLOADING_SUCCESS,
     PASSWORD_EDIT_UPLOADING_FAILURE,
+    MEMBER_WARN_REQUEST,
+    MEMBER_WARN_SUCCESS,
+    MEMBER_WARN_FAILURE,
+    MEMBER_WARNLIST_REQUEST,
+    MEMBER_WARNLIST_SUCCESS,
+    MEMBER_WARNLIST_FAILURE
   } from "../types";
 
 
@@ -32,6 +38,7 @@ import {
     successMsg: "",
     previousMatchMsg: "",
     editsuccess: false,
+    warnlistDetail:""
   };
 
         const authReducer = (state = initialState, action) => {
@@ -144,6 +151,45 @@ import {
                     errorMsg: "Clear Error Fail",
                     previousMatchMsg: "Clear Error Fail",
                     };
+
+                    case MEMBER_WARN_REQUEST:
+                      return {
+                    ...state,
+                    isLoading: true,
+                    };
+                   case MEMBER_WARN_SUCCESS:
+                      return {
+                      ...state,
+                      user: {
+                        ...state.user,
+                        cart: action.payload
+                      }
+                     
+                      };
+                   case MEMBER_WARN_FAILURE:
+                      return {
+                      ...state,
+                      user: {
+                        ...state.user,
+                        cart: ""
+                      }
+                      };
+
+                   case MEMBER_WARNLIST_REQUEST: 
+                      return {
+                        ...state,
+                        isLoading: true
+                      }
+                   case MEMBER_WARNLIST_SUCCESS:
+                        return {
+                          ...state,
+                         warnlistDetail: action.payload
+                        }
+                   case MEMBER_WARNLIST_FAILURE:
+                        return {
+                          ...state,
+                          warnlistDetail:"",
+                        }   
 
               default:
                   return state;             
