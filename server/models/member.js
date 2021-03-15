@@ -1,43 +1,44 @@
 import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
-
-
 // Create Schema
-const MemberSchema = new mongoose.Schema({
-    writer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+const MemberSchema = new mongoose.Schema(
+    {
+        writer: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        title: {
+            type: String,
+            maxlength: 50,
+        },
+        description: {
+            type: String,
+        },
+        price: {
+            type: Number,
+            default: 0,
+        },
+        images: {
+            type: Array,
+            default: [],
+        },
+        continents: {
+            type: Number,
+            default: 1,
+        },
+        sold: {
+            type: Number,
+            maxlength: 100,
+            default: 0,
+        },
+        views: {
+            type: Number,
+            default: 0,
+        },
     },
-    title: {
-        type: String,
-        maxlength: 50
-    },
-    description: {
-        type: String
-    },
-    price: {
-        type: Number,
-        default: 0
-    },
-    images: {
-        type: Array,
-        default: []
-    },
-    continents: {
-        type: Number,
-        default: 1
-    },
-    sold: {
-        type: Number,
-        maxlength: 100,
-        default: 0
-    },
-    views: {
-        type: Number,
-        default: 0
-    }
-}, { timestamps: true })
+    { timestamps: true }
+);
 
 // //서치 기능을 위해 DB모델에서 따로 설정
 // productSchema.index({

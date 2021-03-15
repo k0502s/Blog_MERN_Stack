@@ -1,28 +1,27 @@
 .App {
-  display: flex;
-  width: 100%;
-  align-items: stretch;
+    display: flex;
+    width: 100%;
+    align-items: stretch;
 }
 
-@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+@import 'https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700';
 
 body {
-  font-family: "Poppins", sans-serif;
-  background: #fafafa;
- }
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
 
 a,
 a:hover,
 a:focus {
-  color: inherit;
-  text-decoration: none;
-  transition: all 0.3s;
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
 }
-
 
 #main-footer {
     background: #343a40;
-    color: #ffff
+    color: #ffff;
 }
 
 #page-header {
@@ -38,45 +37,45 @@ a:focus {
 
 #main-body {
     min-height: 90vh;
-  }
+}
 
 .card-img-top {
     width: 100%;
     height: 20rem;
     object-fit: cover;
-  }
+}
 
-  //CKEditor setting
+//CKEditor setting
 
-  .ck {
+.ck {
     .ck-editor {
-      min-width: 100%;;
+        min-width: 100%;
     }
-  }
+}
 
-  .ck-editor__editable {
+.ck-editor__editable {
     max-height: 80rem;
     min-height: 20rem;
     min-width: 100rem;
-  }
+}
 
-  .ck-editor__editable_inline {
+.ck-editor__editable_inline {
     max-height: 80rem;
     min-height: 20rem;
     min-width: 100%;
-  }
+}
 
-  html {
+html {
     width: 100vw;
     overflow-x: hiddem;
-  }
+}
 
-  textarea {
+textarea {
     resize: none;
-  }
+}
 
-  .my_category {
+.my_category {
     &:last-child {
-      margin-bottom: 0.25rem;
+        margin-bottom: 0.25rem;
     }
-  }
+}

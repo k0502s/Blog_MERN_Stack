@@ -1,16 +1,9 @@
-import React, { Fragment } from "react";
-import { useSelector } from "react-redux";
-import Register from "../auth/RegisterModal"
-
+import React, { Fragment } from 'react';
+import { useSelector } from 'react-redux';
+import Register from '../auth/RegisterModal';
 
 function LandingPage() {
-
-
-    const { isAuthenticated } = useSelector(
-        (state) => state.auth
-      );
-    
-
+    const { isAuthenticated } = useSelector((state) => state.auth);
 
     const guestLink = (
         <Fragment>
@@ -25,18 +18,11 @@ function LandingPage() {
             <h4>위의 관리자 아이디로 로그인 해주세요!</h4>
             <Register />
         </Fragment>
-    )
+    );
 
-    const authLink = (
-        <div>로그인 완료!</div>
-    )
+    const authLink = <div>로그인 완료!</div>;
 
-
-    return (
-        <div>
-            {isAuthenticated ? authLink : guestLink}
-        </div>
-    )
+    return <div>{isAuthenticated ? authLink : guestLink}</div>;
 }
 
-export default LandingPage
+export default LandingPage;

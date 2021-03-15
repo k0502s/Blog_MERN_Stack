@@ -1,68 +1,46 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MEMBER_WARNLIST_REQUEST } from '../../redux/types';
 import WarnCardBlock from './Section/WarnCardBlock';
 // import { Empty, Result } from 'antd';
 
-
 const WarnMemberList = (props) => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
     const { warnlistDetail } = useSelector((state) => state.auth);
-    const [Total, setTotal] = useState(0)
-    const [ShowTotal, setShowTotal] = useState(false)
-    const [ShowSuccess, setShowSuccess] = useState(false)
 
     useEffect(() => {
+        let warnLists = []; //여기에 여러 상품 id 값을 받는다.
 
-        let warnLists=[] //여기에 여러 상품 id 값을 받는다.
+        //리덕스 User state안에 cart 안에 상품이 들어있는지 확인
+        if (user && user.cart)
+            if (user.cart.length > 0) {
+                user.cart.forEach((item) => {
+                    warnLists.push(item.id);
+                });
+                const body = {
+                    warnListsId: warnLists,
+                    list: user.cart,
+                };
 
-       //리덕스 User state안에 cart 안에 상품이 들어있는지 확인
-       if(user && user.cart)
-       if(user.cart.length > 0){
-           user.cart.forEach(item => {
-            warnLists.push(item.id)
-           });
-        const body = {
-          warnListsId: warnLists,
-          list: user.cart
-        }
+                dispatch({
+                    type: MEMBER_WARNLIST_REQUEST,
+                    payload: body,
+                });
 
-        dispatch({
-            type:MEMBER_WARNLIST_REQUEST,
-            payload: body
-        })
-
-        //    dispatch(getCartItems(warnLists, user.cart))
-        //    .then(response => {calculateTotal(response.payload)})
-
-       }
-    }, [user])//useEffect가 처음 실행될때 userData가 없으므로 추가해주었다.
-
-    
-
-    // let removeFromCart = (productId) => {
-    //         dispatch(removeCartItem(productId))
-    //         .then(response => {
-    //             if(response.payload.productInfo.length <= 0){
-                   
-    //                 setShowTotal(false)
-
-    //             }
-    //     })
-    //  }
+                //    dispatch(getCartItems(warnLists, user.cart))
+                //    .then(response => {calculateTotal(response.payload)})
+            }
+    }, [user]); //useEffect가 처음 실행될때 userData가 없으므로 추가해주었다.
 
 
     return (
-        <div style={{width: '85%', margin: '3rem auto'}}>
+        <div style={{ width: '85%', margin: '3rem auto' }}>
             <h1>WARN MEMBER LIST</h1>
 
-            <div>                       
-            <WarnCardBlock warnlists={warnlistDetail}/>
+            <div>
+                <WarnCardBlock warnlists={warnlistDetail} />
             </div>
-
-
-            
 
             {/* {ShowTotal ?
              <div style={{marginTop: '3rem'}}>
@@ -89,9 +67,8 @@ const WarnMemberList = (props) => {
             />
             }
              */}
-           
         </div>
-    )
-}
+    );
+};
 
-export default WarnMemberList
+export default WarnMemberList;
