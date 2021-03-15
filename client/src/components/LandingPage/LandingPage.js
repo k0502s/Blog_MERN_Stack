@@ -10,7 +10,7 @@ function LandingPage() {
             <h3>안녕하세요. 동호회 회원 관리 사이트 입니다.</h3>
             <br />
             <br />
-            <label>ID: k7111s@naver.com</label>
+            <label>ID: k4444s@naver.com</label>
             <br />
             <label>PW: 123</label>
             <br />

@@ -10,7 +10,7 @@ const sex = {
 
 const WarnCardBlock = (props) => {
     const dispatch = useDispatch();
-    const [ShowEmpty, setShowEmpty] = useState(false);
+    const [ShowEmpty, setShowEmpty] = useState("");
     const { warnlistDetail } = useSelector((state) => state.auth);
 
     //이미지를 한개만 가져오기 위함이다.
@@ -22,11 +22,11 @@ const WarnCardBlock = (props) => {
     };
 
     useEffect(() => {
-        // if (warnlistDetail.length <= 0) {
-        //     setShowEmpty(false);
-        // } else {
+        if (warnlistDetail.length <= 0 || undefined) {
+            setShowEmpty(false);
+        } else {
             setShowEmpty(true);
-        // 
+        }
     }, [warnlistDetail]);
 
     let removeFromlist = (id) => {
@@ -61,26 +61,26 @@ const WarnCardBlock = (props) => {
 
     return (
         <div>
-                <br />
-                {ShowEmpty ? (
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>프로필</th>
-                                <th>이름</th>
-                                <th>성별</th>
-                                <th>경고 횟수</th>
-                                <th>나이</th>
-                                <th>삭제</th>
-                            </tr>
-                        </thead>
+            <br />
+            {ShowEmpty ? (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>프로필</th>
+                            <th>이름</th>
+                            <th>성별</th>
+                            <th>경고 횟수</th>
+                            <th>나이</th>
+                            <th>삭제</th>
+                        </tr>
+                    </thead>
 
-                        <tbody>{renderItems()}</tbody>
-                    </table>
-                ) : (
-                    <div>데이터가 없습니다.</div>
-                )}
-                {/* <Empty description={false} image={Empty.PRESENTED_IMAGE_SIMPLE}/> */}
+                    <tbody>{renderItems()}</tbody>
+                </table>
+            ) : (
+                <div>데이터가 없습니다.</div>
+            )}
+            {/* <Empty description={false} image={Empty.PRESENTED_IMAGE_SIMPLE}/> */}
         </div>
     );
 };

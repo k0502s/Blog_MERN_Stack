@@ -69,6 +69,7 @@ const authReducer = (state = initialState, action) => {
                 userId: action.payload.user.id,
                 userRole: action.payload.user.role,
                 errorMsg: '',
+                warnlistDetail: '',
             };
 
         case REGISTER_FAILURE:
@@ -221,6 +222,7 @@ const authReducer = (state = initialState, action) => {
         case MEMBER_REMOVEWARNMEMBER_FAILURE:
             return {
                 ...state,
+                warnlistDetail:"",
                 removeWarnMember: false,
             };
 
