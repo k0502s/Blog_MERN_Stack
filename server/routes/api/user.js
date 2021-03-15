@@ -123,7 +123,6 @@ router.post('/:userName/profile', auth, async (req, res) => {
 
 router.post('/warn', auth, (req, res) => {
     //먼저 User 콜렉션에 해당 유저의 정보 가져오기
-
     //req.user === user //middleware을 통과하여 토큰에서 얻어온 user의 id값 가져옴
     User.findOne({ _id: req.user.id }, (err, userInfo) => {
         //가져온 정보에서 카트에다 넣으려하는 상품이 이미 들어 있는지 확인
@@ -172,7 +171,25 @@ router.post('/warn', auth, (req, res) => {
     });
 });
 
+const getPagination = (page, size) => {
+    const limit = size ? +size : 3;
+    const offset = page ? page * limit : 0;
+
+    return { limit, offset };
+};
+
 router.get('/warnlist_by_id', (req, res) => {
+    // const { page, size } = req.body.params;
+    console.log(req);
+    const page = req.query.page;
+    const size = req.query.size;
+
+    const { limit, offset } = getPagination(page, size);
+    const options = {
+        limit: limit,
+        offset: offset,
+        populate: 'writier',
+    };
     let type = req.query.type;
     let warnmemberIds = req.query.id;
     // id=12312,1231231,123123 이거를
@@ -185,14 +202,17 @@ router.get('/warnlist_by_id', (req, res) => {
         });
     }
     //이제 여러개 상품 id을 이용하여 여러 개 삼품 가져올 수 있게됨
-
-    //productIds을 이용해서 DB에서 productId와 같은 상품의 정보를 가져온다.
-    Member.find({ _id: { $in: warnmemberIds } }) //id값이 여러개 들어 있는 배열을 못넣어서 $in을 사용함
-        .populate('writer')
-        .exec((err, warnmember) => {
-            if (err) return res.status(400).send(err);
-            return res.status(200).send(warnmember);
+    const condition = { _id: { $in: warnmemberIds } };
+    //productIds을 이용해서 DB에서 productId와 같은 상품의 정보를 가져온다. //id값이 여러개 들어 있는 배열을 못넣어서 $in을 사용함
+    Member.paginate(condition, { offset, limit }).then((warnmember) => {
+        // console.log(warnmember);
+        res.status(200).send({
+            totalItems: warnmember.totalDocs,
+            warndata: warnmember.docs,
+            totalPages: warnmember.totalPages,
+            currentPage: warnmember.page - 1,
         });
+    });
 });
 
 router.get('/removeWarnMember', auth, (req, res) => {

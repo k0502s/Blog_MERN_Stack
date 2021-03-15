@@ -22,11 +22,11 @@ const WarnCardBlock = (props) => {
     };
 
     useEffect(() => {
-        if (warnlistDetail.length <= 0) {
-            setShowEmpty(false);
-        } else {
+        // if (warnlistDetail.length <= 0) {
+        //     setShowEmpty(false);
+        // } else {
             setShowEmpty(true);
-        }
+        // 
     }, [warnlistDetail]);
 
     let removeFromlist = (id) => {

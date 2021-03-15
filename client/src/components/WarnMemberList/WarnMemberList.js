@@ -2,14 +2,33 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MEMBER_WARNLIST_REQUEST } from '../../redux/types';
 import WarnCardBlock from './Section/WarnCardBlock';
+import Pagination from '@material-ui/lab/Pagination';
 // import { Empty, Result } from 'antd';
 
 const WarnMemberList = (props) => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
-    const { warnlistDetail } = useSelector((state) => state.auth);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(3);
+    const { warnlistDetail, totalPages } = useSelector((state) => state.auth);
+    const pageSizes = [3, 6];
+
+    const getRequestParams = (page, pageSize) => {
+        let params = {};
+
+        if (page) {
+            params.page = page - 1;
+        }
+
+        if (pageSize) {
+            params.size = pageSize;
+        }
+
+        return params;
+    };
 
     useEffect(() => {
+        const params = getRequestParams(page, pageSize);
         let warnLists = []; //여기에 여러 상품 id 값을 받는다.
 
         //리덕스 User state안에 cart 안에 상품이 들어있는지 확인
@@ -21,6 +40,8 @@ const WarnMemberList = (props) => {
                 const body = {
                     warnListsId: warnLists,
                     list: user.cart,
+                    page:  params.page,
+                    size: params.size
                 };
 
                 dispatch({
@@ -31,8 +52,16 @@ const WarnMemberList = (props) => {
                 //    dispatch(getCartItems(warnLists, user.cart))
                 //    .then(response => {calculateTotal(response.payload)})
             }
-    }, [user]); //useEffect가 처음 실행될때 userData가 없으므로 추가해주었다.
+    }, [user, page, pageSize]); //useEffect가 처음 실행될때 userData가 없으므로 추가해주었다.
 
+    const handlePageChange = (event, value) => {
+        setPage(value);
+    };
+
+    const handlePageSizeChange = (event) => {
+        setPageSize(event.target.value);
+        setPage(1);
+    };
 
     return (
         <div style={{ width: '85%', margin: '3rem auto' }}>
@@ -40,6 +69,17 @@ const WarnMemberList = (props) => {
 
             <div>
                 <WarnCardBlock warnlists={warnlistDetail} />
+                <div className="mt-3">
+                    <h7 style={{ marginLeft: 250 }}>Page: </h7>
+                    <select onChange={handlePageSizeChange} value={pageSize}>
+                        {pageSizes.map((size) => (
+                            <option key={size} value={size}>
+                                {size}
+                            </option>
+                        ))}
+                    </select>
+                    <Pagination className="my-3" color="primary" count={totalPages} page={page} siblingCount={1} boundaryCount={1} shape="rounded" onChange={handlePageChange} />
+                </div>
             </div>
 
             {/* {ShowTotal ?

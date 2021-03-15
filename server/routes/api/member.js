@@ -88,6 +88,7 @@ router.get('/', async (req, res) => {
         const { limit, offset } = getPagination(page, size);
 
         await Member.paginate(condition, { offset, limit }).then((data) => {
+            console.log(data);
             res.send({
                 totalItems: data.totalDocs,
                 memberdata: data.docs,

@@ -42,6 +42,10 @@ const initialState = {
     editsuccess: false,
     warnlistDetail: '',
     removeWarnMember: '',
+    totalItems: '',
+    memberlist: '',
+    totalPages: '',
+    currentPage: '',
 };
 
 const authReducer = (state = initialState, action) => {
@@ -185,12 +189,18 @@ const authReducer = (state = initialState, action) => {
         case MEMBER_WARNLIST_SUCCESS:
             return {
                 ...state,
-                warnlistDetail: action.payload,
+                totalItems: action.payload.totalItems,
+                warnlistDetail: action.payload.warndata,
+                totalPages: action.payload.totalPages,
+                currentPage: action.payload.currentPage,
             };
         case MEMBER_WARNLIST_FAILURE:
             return {
                 ...state,
+                totalItems: '',
                 warnlistDetail: '',
+                totalPages: '',
+                currentPage: '',
             };
 
         case MEMBER_REMOVEWARNMEMBER_REQUEST:

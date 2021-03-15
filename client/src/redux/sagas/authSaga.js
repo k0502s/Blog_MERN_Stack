@@ -227,13 +227,13 @@ function* memberWarn(action) {
             type: MEMBER_WARN_SUCCESS,
             payload: result.data,
         });
-        yield put(push(alert("경고 완료.")));
+        yield put(push(alert('경고 완료.')));
     } catch (e) {
         yield put({
             type: MEMBER_WARN_FAILURE,
             payload: e.response,
         });
-        yield put(push(alert("실패했습니다.")));
+        yield put(push(alert('실패했습니다.')));
     }
 }
 
@@ -246,17 +246,21 @@ function* watchmemberWarn() {
 const memberWarnListAPI = (data) => {
     console.log(data, 'data');
 
+
     const warnListsId = data.warnListsId;
     const list = data.list;
+    const page = data.page;
+    const size = data.size;
+    // const params = data.params
 
-    return axios.get(`/api/user/warnlist_by_id?id=${warnListsId}&type=array`).then((response) => {
+    return axios.get(`/api/user/warnlist_by_id?id=${warnListsId}&type=array&page=${page}&size=${size}`).then((response) => {
         //CartItem 들에 해당하는 정보들을 product Collection에서 가져온 후에
         console.log(response.data);
         //Quantity 정보를 넣어 준다. 즉 product 정보와, cart 정보의 Quantity의 조합이다.
         list.forEach((listItem) => {
-            response.data.forEach((listDetail, index) => {
+            response.data.warndata.forEach((listDetail, index) => {
                 if (listItem.id === listDetail._id) {
-                    response.data[index].quantity = listItem.quantity;
+                    response.data.warndata[index].quantity = listItem.quantity;
                 }
             });
         });
@@ -270,7 +274,7 @@ function* memberWarnList(action) {
         console.log(result);
         yield put({
             type: MEMBER_WARNLIST_SUCCESS,
-            payload: result
+            payload: result,
         });
     } catch (e) {
         yield put({
@@ -320,7 +324,7 @@ function* removeWarnmember(action) {
         const result = yield call(removeWarnmemberAPI, action.payload);
         yield put({
             type: MEMBER_REMOVEWARNMEMBER_SUCCESS,
-            payload: result
+            payload: result,
         });
     } catch (e) {
         yield put({
